@@ -1,0 +1,22 @@
+{
+  "name": "cowin-bruteforce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@antiadmin/anticaptchaofficial": "^1.0.14",
+    "body-parser": "^1.19.0",
+    "chalk": "^4.1.1",
+    "express": "^4.17.1",
+    "moment": "^2.29.1",
+    "puppeteer": "^9.1.1",
+    "svg-png-converter": "0.0.9",
+    "unirest": "^0.6.0"
+  }
+}
