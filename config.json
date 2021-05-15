@@ -4,5 +4,6 @@
   "beneficiaries": [""],
   "pincode": "",
   "18": true,
-  "autotoken": false
+  "autotoken": false,
+  "dose": 1
 }

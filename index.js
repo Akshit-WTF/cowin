@@ -50,8 +50,8 @@ if (config.autotoken === false) {
     })();
 }
 
-if (config.beneficiaries.length === 0 || !config.phone || !config["anti-captcha-key"]) {
-    console.log(chalk.redBright('Variable(s) missing in the config file. Please fix to continue.'));
+if (config.beneficiaries.length === 0 || !config.phone || !config["anti-captcha-key"] || (config.dose !== 1 && config.dose !== 2)) {
+    console.log(chalk.redBright('Variable(s) missing/incorrect in the config file. Please fix to continue.'));
     process.exit(0);
 }
 
@@ -168,7 +168,7 @@ let mainInterval = setInterval(function () {
                 let foundSlot = false;
                 for (const centre of res.body.centers) {
                     for (const session of centre.sessions) {
-                        if ((session.min_age_limit === 18) === config["18"] && session.available_capacity !== 0) {
+                        if ((session.min_age_limit === 18) === config["18"] && session[`available_capacity_dose${config.dose}`] !== 0) {
                             foundSlot = true;
                             let captcha = await getCaptcha();
                             if (captcha === false) return;
@@ -183,20 +183,23 @@ let mainInterval = setInterval(function () {
                                     "captcha": captcha,
                                     "beneficiaries": config.beneficiaries,
                                     "slot": session.slots[0],
-                                    "dose": 1,
+                                    "dose": config.dose
                                 }))
                                 .end(function (res) {
                                     if (res.appointment_confirmation_no) {
                                         console.log(chalk.greenBright('Appointment booked successfully! Please login to check.'));
+                                        if (config.autotoken === true) {
+                                            clearInterval(otpReqInterval);
+                                        }
+                                        clearInterval(mainInterval);
+                                        clearInterval(sessionCheckInterval);
+                                        process.exit(0);
                                     } else {
+                                        captchaRequested = false;
+                                        foundSlot = false;
                                         console.log(chalk.redBright('Tried booking an appointment but failed. Restart this script.'));
+                                        console.log(chalk.redBright('Reason: ' + res.body.error));
                                     }
-                                    if (config.autotoken === true) {
-                                        clearInterval(otpReqInterval);
-                                    }
-                                    clearInterval(mainInterval);
-                                    clearInterval(sessionCheckInterval);
-                                    process.exit(0);
                                 });
                         }
                     }
