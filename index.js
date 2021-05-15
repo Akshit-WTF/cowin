@@ -182,7 +182,7 @@ let mainInterval = setInterval(function () {
                                     "dose": 1,
                                 }))
                                 .end(function (res) {
-                                    if (res.appointment_id) {
+                                    if (res.appointment_confirmation_no) {
                                         console.log(chalk.greenBright('Appointment booked successfully! Please login to check.'));
                                     } else {
                                         console.log(chalk.redBright('Tried booking an appointment but failed. Restart this script.'));
