@@ -46,7 +46,7 @@ if (config.autotoken === false) {
     })();
 }
 
-if (!config.beneficiary || !config.phone || !config["anti-captcha-key"]) {
+if (config.beneficiaries.length !== 0 || !config.phone || !config["anti-captcha-key"]) {
     console.log(chalk.redBright('Variable(s) missing in the config file. Please fix to continue.'));
     process.exit(0);
 }
