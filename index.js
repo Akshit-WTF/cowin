@@ -15,7 +15,7 @@ if (config.autotoken === true) {
     }, 870000);
     const app = require('express')();
     app.use(require('body-parser').json());
-    app.post('/sms', async function (req, res) {
+    app.post('/', async function (req, res) {
         let str = req.body.message;
         for (const i of str.split(' ')) {
             let maybeOTP = i.slice(0, -1);
