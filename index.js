@@ -1,5 +1,5 @@
 const config = require('./config.json');
-const s2p = require('svg-png-converter');
+const svg2img = require('svg2img');
 const crypto = require('crypto');
 const unirest = require('unirest');
 const chalk = require('chalk');
@@ -94,6 +94,14 @@ function getAuthToken(id, otp) {
     });
 }
 
+function convertSVGtoPNG(svg) {
+    return new Promise(function (resolve) {
+        svg2img(svg, {format: 'jpg', 'quality': 100}, function (error, buffer) {
+            resolve(buffer.toString('base64'));
+        });
+    })
+}
+
 function getCaptcha() {
     if (captchaRequested === true) return false;
     return new Promise(function (resolve, reject) {
@@ -109,12 +117,8 @@ function getCaptcha() {
                     svg = replace(svg, `fill="#${i}"`, 'fill="#fff"')
                     svg = replace(svg, `stroke="#${i}"`, 'stroke="none"')
                 }
-                let base64 = await s2p.svg2png({
-                    input: svg,
-                    encoding: 'dataURL',
-                    format: 'jpeg'
-                });
-                let captcha = await ac.solveImage(base64.split(',')[1]);
+                let base64 = await convertSVGtoPNG(svg);
+                let captcha = await ac.solveImage(base64);
                 resolve(captcha);
             });
     });
@@ -167,9 +171,7 @@ let mainInterval = setInterval(function () {
                                     "center_id": centre.center_id,
                                     "session_id": session.session_id,
                                     "captcha": captcha,
-                                    "beneficiaries": [
-                                        config.beneficiary
-                                    ],
+                                    "beneficiaries": config.beneficiaries,
                                     "slot": session.slots[0],
                                     "dose": 1,
                                 }))
