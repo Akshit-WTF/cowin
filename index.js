@@ -20,7 +20,9 @@ if (config.autotoken === true) {
         for (const i of str.split(' ')) {
             let maybeOTP = i.slice(0, -1);
             if (maybeOTP.length === 6 && !isNaN(parseInt(maybeOTP))) {
-                console.log(maybeOTP)
+                token = `Bearer ${await getAuthToken(otpUUID, maybeOTP)}`;
+                console.log(chalk.greenBright(`${moment().format('LTS')}: Regenerated the authorization token successfully.`));
+                checkAlive();
             }
         }
         res.sendStatus(200);
