@@ -1,5 +1,4 @@
 const config = require('./config.json');
-const svg2img = require('svg2img');
 const crypto = require('crypto');
 const unirest = require('unirest');
 const chalk = require('chalk');
