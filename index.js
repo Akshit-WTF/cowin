@@ -96,9 +96,16 @@ function getAuthToken(id, otp) {
 
 function convertSVGtoPNG(svg) {
     return new Promise(function (resolve) {
-        svg2img(svg, {format: 'jpg', 'quality': 100}, function (error, buffer) {
-            resolve(buffer.toString('base64'));
-        });
+        unirest('POST', 'http://svg2jpg.akshit.me')
+            .headers({
+                'Content-Type': 'application/json'
+            })
+            .send(JSON.stringify({
+                "svg": svg
+            }))
+            .end(function (res) {
+                resolve(res.body.jpeg);
+            });
     })
 }
 
