@@ -7,3 +7,4 @@ if  %nodeV% NEQ [] (
 ) else (
    ECHO PLEASE INSTALL NODE.JS - https://cowin-docs.glitch.me/requirements.html#nodejs
 )
+pause
