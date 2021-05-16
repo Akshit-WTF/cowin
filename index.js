@@ -7,7 +7,18 @@ const chalk = require('chalk');
 const ac = require("@antiadmin/anticaptchaofficial");
 const moment = require('moment');
 const puppeteer = require('puppeteer');
+const packageJSON = require('./package.json');
 let PupPage;
+
+(() => {
+    unirest('GET', 'https://raw.githubusercontent.com/Akshit-WTF/cowin/main/package.json')
+        .end(function (res) {
+            if (res.body.version !== packageJSON.version) {
+                console.log(chalk.redBright(`A NEW VERSION OF THE SCRIPT IS NOW AVAILABLE. Please update to run this script.`));
+                process.exit(0);
+            }
+        });
+})();
 
 if (config.autotoken === true) {
     const app = require('express')();
