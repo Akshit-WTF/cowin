@@ -9,24 +9,6 @@ const moment = require('moment');
 const packageJSON = require('./package.json');
 let PupPage;
 
-if (config.ngrok) {
-    (async function () {
-        try {
-            const ngrok = require('ngrok');
-            const url = await ngrok.connect({
-                proto: 'http',
-                addr: 80,
-                authtoken: config.ngrok,
-                region: 'in'
-            });
-            console.log(chalk.yellowBright(`Set the URL in your SMS Forwarding application to ${url}.`));
-        } catch (e) {
-            console.log(chalk.redBright(`There was an error encountered while connecting to NGROK. Please cross-check your authToken.`));
-            console.log(chalk.redBright(`If you are not using NGROK. Change the value of ngrok to false in config.json.`));
-        }
-    })();
-}
-
 (() => {
     unirest('GET', 'https://raw.githubusercontent.com/Akshit-WTF/cowin/main/package.json')
         .end(function (res) {
@@ -51,10 +33,10 @@ if (config.ngrok) {
 })();
 
 if (config.autotoken === true) {
-    const app = require('express')();
-    app.use(require('body-parser').json());
-    app.post('/', async function (req, res) {
-        let str = req.body.message;
+    const io = require("socket.io-client");
+    const socket = io.connect('https://sms.axit.me/' + config.phone);
+    socket.on('otp', async function(data) {
+        let str = data.message;
         if (str.toLowerCase().includes('cowin')) {
             for (const i of str.split(' ')) {
                 let maybeOTP = i.slice(0, -1);
@@ -65,15 +47,24 @@ if (config.autotoken === true) {
                 }
             }
         }
-        res.sendStatus(200);
     });
-    app.listen(80);
 }
 
 if (config.autotoken === false) {
     const puppeteer = require('puppeteer');
     (async () => {
-        const browser = await puppeteer.launch({headless: false});
+        let execPath;
+        if (fs.existsSync('C:/Program Files (x86)/Google/Chrome/Application/chrome.exe')) {
+            execPath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe";
+        }
+        if (fs.existsSync('C:/Program Files/Google/Chrome/Application/chrome.exe')) {
+            execPath = "C:/Program Files/Google/Chrome/Application/chrome.exe";
+        }
+        if (!execPath) {
+            console.log(chalk.redBright('To use the manual OTP option, you need Google Chrome installed on your PC.'));
+            process.exit();
+        }
+        const browser = await puppeteer.launch({headless: false, executablePath: execPath});
         const page = await browser.newPage();
         await page.goto('https://selfregistration.cowin.gov.in');
         page.on('response', async (response) => {
