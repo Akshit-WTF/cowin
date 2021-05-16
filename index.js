@@ -95,8 +95,8 @@ function requestOTP() {
 (() => {
     if (fs.existsSync(path.join(__dirname, './token'))) {
         token = fs.readFileSync(path.join(__dirname, './token'), 'utf-8');
-        checkAlive();
     }
+    checkAlive();
 })()
 
 function getAuthToken(id, otp) {
@@ -168,6 +168,7 @@ function checkAlive() {
                 fs.writeFileSync(path.join(__dirname, './token'), token);
             } else {
                 if (config.autotoken === false) {
+                    if (!PupPage) return;
                     PupPage.reload();
                 }
                 if (config.autotoken === true) {
