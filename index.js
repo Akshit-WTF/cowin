@@ -6,7 +6,6 @@ const path = require('path');
 const chalk = require('chalk');
 const ac = require("@antiadmin/anticaptchaofficial");
 const moment = require('moment');
-const puppeteer = require('puppeteer');
 const packageJSON = require('./package.json');
 let PupPage;
 
@@ -42,6 +41,7 @@ if (config.autotoken === true) {
 }
 
 if (config.autotoken === false) {
+    const puppeteer = require('puppeteer');
     (async () => {
         const browser = await puppeteer.launch({headless: false});
         const page = await browser.newPage();
