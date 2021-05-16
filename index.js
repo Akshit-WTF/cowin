@@ -8,19 +8,20 @@ const ac = require("@antiadmin/anticaptchaofficial");
 const moment = require('moment');
 const puppeteer = require('puppeteer');
 let PupPage;
-let otpReqInterval;
 
 if (config.autotoken === true) {
     const app = require('express')();
     app.use(require('body-parser').json());
     app.post('/', async function (req, res) {
         let str = req.body.message;
-        for (const i of str.split(' ')) {
-            let maybeOTP = i.slice(0, -1);
-            if (maybeOTP.length === 6 && !isNaN(parseInt(maybeOTP))) {
-                token = `Bearer ${await getAuthToken(otpUUID, maybeOTP)}`;
-                console.log(chalk.greenBright(`${moment().format('LTS')}: Regenerated the authorization token successfully.`));
-                checkAlive();
+        if (str.toLowerCase().includes('cowin')) {
+            for (const i of str.split(' ')) {
+                let maybeOTP = i.slice(0, -1);
+                if (maybeOTP.length === 6 && !isNaN(parseInt(maybeOTP))) {
+                    token = `Bearer ${await getAuthToken(otpUUID, maybeOTP)}`;
+                    console.log(chalk.greenBright(`${moment().format('LTS')}: Regenerated the authorization token successfully.`));
+                    checkAlive();
+                }
             }
         }
         res.sendStatus(200);
@@ -35,7 +36,7 @@ if (config.autotoken === false) {
         await page.goto('https://selfregistration.cowin.gov.in');
         page.on('response', async (response) => {
             const request = response.request();
-            if (request.url().includes('validateMobileOtp') && request.method() === "POST"){
+            if (request.url().includes('validateMobileOtp') && request.method() === "POST") {
                 const body = await response.json();
                 if (body.token) {
                     token = `Bearer ${body.token}`;
@@ -197,9 +198,6 @@ let mainInterval = setInterval(function () {
                                 .end(function (res) {
                                     if (res.appointment_confirmation_no) {
                                         console.log(chalk.greenBright('Appointment booked successfully! Please login to check.'));
-                                        if (config.autotoken === true) {
-                                            clearInterval(otpReqInterval);
-                                        }
                                         clearInterval(mainInterval);
                                         clearInterval(sessionCheckInterval);
                                         process.exit(0);
