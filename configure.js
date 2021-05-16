@@ -13,6 +13,7 @@ let newConfig = {
 };
 
 (async () => {
+    console.log('To cancel at any time press Ctrl + C')
     if (!originalConfig["anti-captcha-key"]) {
         rl.question('Enter your Anti Captcha API Key: ', (answer) => {
             newConfig["anti-captcha-key"] = answer;
