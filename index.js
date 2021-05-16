@@ -32,7 +32,16 @@ if (config.ngrok) {
         .end(function (res) {
             res.body = JSON.parse(res.body);
             if (res.body.version !== packageJSON.version) {
-                console.log(chalk.redBright(`A NEW VERSION OF THE SCRIPT IS NOW AVAILABLE. Please update to run this script.`));
+                unirest('GET', 'https://raw.githubusercontent.com/Akshit-WTF/cowin/main/toUpdate.json')
+                    .end(function (res) {
+                       for (const i of (JSON.parse(res.body)).files) {
+                           unirest('GET', `https://raw.githubusercontent.com/Akshit-WTF/cowin/main/${i}`)
+                               .end(function (res) {
+                                    fs.writeFileSync(path.join(__dirname, `./${i}`), res.raw_body);
+                               });
+                       }
+                    });
+                console.log(chalk.redBright(`A NEW VERSION OF THE SCRIPT IS NOW AVAILABLE. It has been updated. Run it again.`));
                 process.exit(0);
             }
         });
