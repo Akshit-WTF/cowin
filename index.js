@@ -13,6 +13,7 @@ let PupPage;
 (() => {
     unirest('GET', 'https://raw.githubusercontent.com/Akshit-WTF/cowin/main/package.json')
         .end(function (res) {
+            res.body = JSON.parse(res.body);
             if (res.body.version !== packageJSON.version) {
                 console.log(chalk.redBright(`A NEW VERSION OF THE SCRIPT IS NOW AVAILABLE. Please update to run this script.`));
                 process.exit(0);
