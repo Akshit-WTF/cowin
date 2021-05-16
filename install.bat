@@ -1,3 +1,3 @@
 @echo off
-node index
+npm install
 pause
