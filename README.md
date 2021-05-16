@@ -1,3 +1,4 @@
+[![DeepScan grade](https://deepscan.io/api/teams/14109/projects/17203/branches/387105/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=14109&pid=17203&bid=387105)
 
 # COWIN - Brute Force
 
