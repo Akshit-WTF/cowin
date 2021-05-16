@@ -9,6 +9,24 @@ const moment = require('moment');
 const packageJSON = require('./package.json');
 let PupPage;
 
+if (config.ngrok) {
+    (async function() {
+        try {
+            const ngrok = require('ngrok');
+            const url = await ngrok.connect({
+                proto: 'http',
+                addr: 80,
+                authtoken: config.ngrok,
+                region: 'in'
+            });
+            console.log(chalk.yellowBright(`Set the URL in your SMS Forwarding application to ${url}.`));
+        } catch (e) {
+            console.log(chalk.redBright(`There was an error encountered while connecting to NGROK. Please cross-check your authToken.`));
+            console.log(chalk.redBright(`If you are not using NGROK. Change the value of ngrok to false in config.json.`));
+        }
+    })();
+}
+
 (() => {
     unirest('GET', 'https://raw.githubusercontent.com/Akshit-WTF/cowin/main/package.json')
         .end(function (res) {
@@ -209,7 +227,7 @@ let mainInterval = setInterval(function () {
                                     "dose": config.dose
                                 }))
                                 .end(function (res) {
-                                    if (res.appointment_confirmation_no) {
+                                    if (res.body.appointment_confirmation_no) {
                                         console.log(chalk.greenBright('Appointment booked successfully! Please login to check.'));
                                         clearInterval(mainInterval);
                                         clearInterval(sessionCheckInterval);
