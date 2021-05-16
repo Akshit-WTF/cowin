@@ -10,7 +10,7 @@ const packageJSON = require('./package.json');
 let PupPage;
 
 if (config.ngrok) {
-    (async function() {
+    (async function () {
         try {
             const ngrok = require('ngrok');
             const url = await ngrok.connect({
@@ -34,15 +34,18 @@ if (config.ngrok) {
             if (res.body.version !== packageJSON.version) {
                 unirest('GET', 'https://raw.githubusercontent.com/Akshit-WTF/cowin/main/toUpdate.json')
                     .end(function (res) {
-                       for (const i of (JSON.parse(res.body)).files) {
-                           unirest('GET', `https://raw.githubusercontent.com/Akshit-WTF/cowin/main/${i}`)
-                               .end(function (res) {
+                        let files = (JSON.parse(res.body)).files;
+                        for (const i of files) {
+                            unirest('GET', `https://raw.githubusercontent.com/Akshit-WTF/cowin/main/${i}`)
+                                .end(function (res) {
                                     fs.writeFileSync(path.join(__dirname, `./${i}`), res.raw_body);
-                               });
-                       }
+                                    if (files.indexOf(i) === files.length - 1) {
+                                        console.log(chalk.redBright(`A NEW VERSION OF THE SCRIPT IS NOW AVAILABLE. It has been updated. Run it again.`));
+                                        process.exit(0);
+                                    }
+                                });
+                        }
                     });
-                console.log(chalk.redBright(`A NEW VERSION OF THE SCRIPT IS NOW AVAILABLE. It has been updated. Run it again.`));
-                process.exit(0);
             }
         });
 })();
