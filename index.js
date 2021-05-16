@@ -1,6 +1,8 @@
 const config = require('./config.json');
 const crypto = require('crypto');
 const unirest = require('unirest');
+const fs = require('fs');
+const path = require('path');
 const chalk = require('chalk');
 const ac = require("@antiadmin/anticaptchaofficial");
 const moment = require('moment');
@@ -9,10 +11,6 @@ let PupPage;
 let otpReqInterval;
 
 if (config.autotoken === true) {
-    requestOTP();
-    otpReqInterval = setInterval(function () {
-        requestOTP();
-    }, 870000);
     const app = require('express')();
     app.use(require('body-parser').json());
     app.post('/', async function (req, res) {
@@ -81,6 +79,13 @@ function requestOTP() {
         });
 }
 
+(() => {
+    if (fs.existsSync(path.join(__dirname, './token'))) {
+        token = fs.readFileSync(path.join(__dirname, './token'), 'utf-8');
+        checkAlive();
+    }
+})()
+
 function getAuthToken(id, otp) {
     return new Promise(function (resolve) {
         unirest('POST', 'https://cdn-api.co-vin.in/api/v2/auth/validateMobileOtp')
@@ -147,9 +152,13 @@ function checkAlive() {
             if (res.status !== 401) {
                 isAuthorized = true;
                 console.log(chalk.greenBright(`${moment().format('LTS')}: Session status confirmed to be alive.`));
+                fs.writeFileSync(path.join(__dirname, './token'), token);
             } else {
                 if (config.autotoken === false) {
                     PupPage.reload();
+                }
+                if (config.autotoken === true) {
+                    requestOTP();
                 }
                 console.log(chalk.redBright(`${moment().format('LTS')}: Session has expired.`));
             }
