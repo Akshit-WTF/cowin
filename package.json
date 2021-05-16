@@ -1,6 +1,6 @@
 {
   "name": "cowin-bruteforce",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple yet powerful script to get a vaccination slot on the COWIN portal.",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,7 @@
     "unirest": "^0.6.0"
   },
   "devDependencies": {
+    "ngrok": "^4.0.1",
     "request": "^2.88.2"
   }
 }
