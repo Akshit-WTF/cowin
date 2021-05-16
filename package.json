@@ -1,6 +1,6 @@
 {
   "name": "cowin-bruteforce",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Simple yet powerful script to get a vaccination slot on the COWIN portal.",
   "main": "index.js",
   "scripts": {
@@ -14,13 +14,12 @@
     "@antiadmin/anticaptchaofficial": "^1.0.14",
     "body-parser": "^1.19.0",
     "chalk": "^4.1.1",
-    "express": "^4.17.1",
     "moment": "^2.29.1",
     "puppeteer": "^9.1.1",
     "unirest": "^0.6.0"
   },
   "devDependencies": {
-    "ngrok": "^4.0.1",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "socket.io-client": "^4.1.1"
   }
 }
