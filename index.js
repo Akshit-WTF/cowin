@@ -184,7 +184,7 @@ function checkAlive() {
         })
         .end(function (res) {
             if (res.status !== 401) {
-                isAuthorized = false;
+                isAuthorized = true;
                 console.log(chalk.greenBright(`${moment().format('LTS')}: Session status confirmed to be alive.`));
                 fs.writeFileSync(path.join(__dirname, './token'), token);
             } else {
@@ -195,10 +195,15 @@ function checkAlive() {
                 if (config.autotoken === true) {
                     requestOTP();
                 }
+                isAuthorized = false;
                 console.log(chalk.redBright(`${moment().format('LTS')}: Session has expired.`));
             }
         });
 }
+
+(async () => {
+    console.log(await getCaptcha())
+})()
 
 let mainInterval = setInterval(function () {
     if (!isAuthorized) return console.log(chalk.redBright(`${moment().format('LTS')}: Session not authorized, not checking for available slots.`));
