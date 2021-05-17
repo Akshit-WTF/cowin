@@ -1,3 +1,3 @@
 {
-  "files": ["index.js", "package.json", "install_node.ps1", "install.bat"]
+  "files": ["index.js", "package.json", "install_node.ps1", "install.bat", "configure.js"]
 }
