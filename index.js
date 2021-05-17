@@ -162,7 +162,7 @@ function getCaptcha() {
                 captchaRequested = true;
                 let svg = res.body.captcha;
                 svg = svg.replace(/\\\//g, "/");
-                for (let i = 111; i !== 999; i += 111) {
+                for (let i = 111; i < 1000; i += 111) {
                     svg = replace(svg, `fill="#${i}"`, 'fill="#fff"')
                     svg = replace(svg, `stroke="#${i}"`, 'stroke="none"')
                 }
