@@ -138,7 +138,7 @@ function getAuthToken(id, otp) {
 
 function convertSVGtoPNG(svg) {
     return new Promise(function (resolve) {
-        unirest('POST', 'http://svg2jpg.akshit.me')
+        unirest('POST', 'https://svg2jpg.akshit.me')
             .headers({
                 'Content-Type': 'application/json'
             })
@@ -184,7 +184,7 @@ function checkAlive() {
         })
         .end(function (res) {
             if (res.status !== 401) {
-                isAuthorized = true;
+                isAuthorized = false;
                 console.log(chalk.greenBright(`${moment().format('LTS')}: Session status confirmed to be alive.`));
                 fs.writeFileSync(path.join(__dirname, './token'), token);
             } else {
