@@ -162,7 +162,7 @@ function getCaptcha() {
                 captchaRequested = true;
                 let svg = res.body.captcha;
                 svg = svg.replace(/\\\//g, "/");
-                for (let i = 111; i < 999; i += 111) {
+                for (let i = 111; i !== 999; i += 111) {
                     svg = replace(svg, `fill="#${i}"`, 'fill="#fff"')
                     svg = replace(svg, `stroke="#${i}"`, 'stroke="none"')
                 }
@@ -200,10 +200,6 @@ function checkAlive() {
             }
         });
 }
-
-(async () => {
-    console.log(await getCaptcha())
-})()
 
 let mainInterval = setInterval(function () {
     if (!isAuthorized) return console.log(chalk.redBright(`${moment().format('LTS')}: Session not authorized, not checking for available slots.`));
