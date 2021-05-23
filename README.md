@@ -2,5 +2,6 @@
 [![CodeQL](https://github.com/Akshit-WTF/cowin/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Akshit-WTF/cowin/actions/workflows/codeql-analysis.yml)
 # COWIN - Automatic Appointment Booking
 
-#Depreciation Notice
+# Depreciation Notice
+
 This build has been depreciated as of May 19, 2021. The reason for this is, I am now working on a much better script that is cross-platform and requires no installation at all. The new script can be found here: https://cowin.akshit.live
